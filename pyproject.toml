@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "homework-27-pd12"
+version = "0.1.0"
+description = ""
+authors = ["StasHunter92 <stashunter92@gmail.com>"]
+readme = "README.md"
+packages = [{include = "homework_27_pd12"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.1.5"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
