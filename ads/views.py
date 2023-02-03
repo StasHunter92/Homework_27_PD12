@@ -1,6 +1,7 @@
 import json
 from json import JSONDecodeError
 
+from django.core.exceptions import ValidationError
 from django.db.models import QuerySet
 from django.http import JsonResponse, Http404
 from django.utils.decorators import method_decorator
@@ -56,17 +57,16 @@ class AdView(View):
         """
         try:
             ad_data: dict = json.loads(request.body)
-        except JSONDecodeError:
+            ad: Ad = Ad.objects.create(
+                name=ad_data.get("name"),
+                author=ad_data.get("author"),
+                price=ad_data.get("price"),
+                description=ad_data.get("description"),
+                address=ad_data.get("address"),
+                is_published=ad_data.get("is_published")
+            )
+        except (JSONDecodeError, ValueError, ValidationError):
             return JsonResponse({"status": "Wrong data"}, status=400)
-
-        ad: Ad = Ad.objects.create(
-            name=ad_data.get("name"),
-            author=ad_data.get("author"),
-            price=ad_data.get("price"),
-            description=ad_data.get("description"),
-            address=ad_data.get("address"),
-            is_published=ad_data.get("is_published")
-        )
 
         response: dict = {
             "id": ad.id,
@@ -143,12 +143,11 @@ class CategoryView(View):
         """
         try:
             category_data: dict = json.loads(request.body)
-        except JSONDecodeError:
+            category: Category = Category.objects.create(
+                name=category_data.get("name")
+            )
+        except (JSONDecodeError, ValueError, ValidationError):
             return JsonResponse({"status": "Wrong data"}, status=400)
-
-        category: Category = Category.objects.create(
-            name=category_data.get("name")
-        )
 
         response: dict = {
             "id": category.id,
